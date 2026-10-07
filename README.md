@@ -12,6 +12,15 @@
 | **Chrome 扩展**（推荐） | 直接读写浏览器书签，改动先留在草稿里，确认后才"应用到 Chrome"，应用前自动备份 | 用 Chrome / Edge 等 Chromium 内核浏览器 |
 | **单文件网页版** | 一个 `index.html`，双击即用。导入你导出的书签 HTML，整理完导出定稿再导回浏览器 | 不想装扩展、Firefox 用户、想在别的电脑上先看效果 |
 
+## 下载
+
+不用装 Python，直接拿构建好的：**[Releases](releases/latest)**
+
+- `marknest-extension-vX.Y.Z.zip` — 解压得到一个文件夹，在 `chrome://extensions` 开「开发者模式」→「加载已解压的扩展程序」选它
+- `marknest-web-vX.Y.Z.html` — 双击用浏览器打开，按提示导入你导出的书签 HTML
+
+想自己构建：`python3 tools/build.py`，产物在 `dist/`；`python3 tools/package.py` 会打成上面那两个发布文件。
+
 ---
 
 ## 为什么做这个
@@ -91,6 +100,7 @@
 ```bash
 python3 tools/make-demo.py     # 生成合成演示数据 samples/demo-bookmarks.html
 python3 tools/build.py         # 产出 dist/extension 与 dist/web/index.html
+python3 tools/package.py       # 打成发布文件（zip + 单文件 html）到 dist/release/
 python3 tools/screenshot.py    # 用无头 Chrome 重新生成顶部预览图（内容全是合成数据）
 python3 tests/run-tests.py     # 静态自测：构建、泄露守卫、CSP、manifest、i18n 对齐
 # 功能自测：用浏览器打开 tests/browser-tests.html，应显示"全部通过"

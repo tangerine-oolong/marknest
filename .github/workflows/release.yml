@@ -1,0 +1,60 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: 泄露守卫（源码）
+        run: python3 tools/leak-guard.py
+
+      - name: 构建 + 打包
+        run: |
+          python3 tools/build.py
+          python3 tools/package.py
+
+      - name: 泄露守卫（产物）
+        run: python3 tools/leak-guard.py dist/
+
+      - name: 静态自测
+        run: python3 tests/run-tests.py
+
+      - name: 创建 Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          cat > /tmp/notes.md <<MD
+          ## 怎么用
+
+          **marknest-extension-${TAG}.zip** — Chrome / Edge 等 Chromium 内核浏览器
+          1. 解压，得到一个 \`marknest-extension\` 文件夹
+          2. 打开 \`chrome://extensions\` → 开启右上角「开发者模式」
+          3. 点「加载已解压的扩展程序」→ 选那个文件夹
+          4. 点工具栏图标即可开始整理；改动只在草稿里，点「应用到 Chrome」才会写回，写回前自动备份
+
+          **marknest-web-${TAG}.html** — 不想装扩展，或用的是 Firefox
+          1. 双击用浏览器打开
+          2. 先在浏览器书签管理器里「导出书签」拿到 HTML
+          3. 把它选进本工具，整理完导出定稿 HTML，再导回浏览器（追加，不覆盖）
+
+          两个版本功能一致，差别只在扩展能直接读写浏览器书签、并算出「常用 / 从未访问」标签。
+          完整说明见 README 与 docs/。
+          MD
+          gh release create "$TAG" \
+            --title "Marknest $TAG" \
+            --notes-file /tmp/notes.md \
+            --verify-tag \
+            "dist/release/marknest-extension-${TAG}.zip" \
+            "dist/release/marknest-web-${TAG}.html"
