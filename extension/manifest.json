@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Marknest",
+  "version": "0.1.0",
+  "description": "Marknest · 书签整理台：全局搜索、批量移动、回收站与撤销、自动归类建议、导入前体检，确认后一次写回 Chrome。数据全部留在本机。",
+  "permissions": ["bookmarks", "storage", "history"],
+  "optional_host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "打开 Marknest 书签整理台"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "minimum_chrome_version": "114"
+}

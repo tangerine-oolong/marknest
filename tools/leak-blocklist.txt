@@ -1,0 +1,12 @@
+# 泄露守卫黑名单模板：一行一个片段（大小写不敏感），# 开头为注释。
+#
+# 用法：复制成 tools/leak-blocklist.local.txt 并填入你自己的敏感片段——
+# 那个 .local 文件已被 .gitignore 排除，不会进仓库。
+# 建议填：公司内网域名、内部系统代号、你的真实姓名/花名/邮箱前缀、私人项目名。
+#
+# 示例（都是假域名，照这个格式写你自己的）：
+intranet.your-company.com
+wiki.your-company.com
+git.your-company.internal
+your-real-name
+your-email-prefix

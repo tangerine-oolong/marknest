@@ -1,0 +1,38 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: 泄露守卫（禁止真实书签数据入库）
+        run: python3 tools/leak-guard.py
+
+      - name: 构建双产物
+        run: python3 tools/build.py
+
+      - name: CSP 合规（扩展包内不得有内联脚本）
+        run: python3 tools/csp-check.py dist/extension
+
+      - name: manifest 校验
+        run: python3 -c "import json;d=json.load(open('dist/extension/manifest.json'));assert d['manifest_version']==3;print('manifest ok', d['name'], d['version'])"
+
+      - name: 单元自测（core + mock 适配器）
+        run: python3 tests/run-tests.py
+
+      - name: 发布前泄露复扫（含构建产物）
+        run: python3 tools/leak-guard.py dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: marknest
+          path: dist/

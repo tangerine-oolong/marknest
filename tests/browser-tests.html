@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>Marknest 自测套件</title>
+<style>
+  body{font:13px/1.6 -apple-system,"PingFang SC",sans-serif;margin:24px;color:#1c1f23}
+  h1{font-size:17px} .t{padding:6px 8px;border-bottom:1px solid #eee}
+  .pass{color:#1f9d61} .fail{color:#d94a45;font-weight:600}
+  .sum{margin:14px 0;padding:10px;border-radius:8px;background:#f4f6f8}
+  small{color:#888}
+</style>
+</head>
+<body>
+<h1>Marknest · 自测套件</h1>
+<div class="sum" id="sum">运行中…</div>
+<div id="out"></div>
+
+<script src="../src/core/i18n.js"></script>
+<script src="../src/core/model.js"></script>
+<script src="../src/core/parse.js"></script>
+<script src="../src/core/tags.js"></script>
+<script src="../src/core/classify.js"></script>
+<script src="../src/core/preflight.js"></script>
+<script src="../src/core/export.js"></script>
+<script src="../src/core/diff.js"></script>
+<script src="../src/adapters/file-adapter.js"></script>
+<script src="../src/adapters/chrome-adapter.js"></script>
+<script src="../src/adapters/mock-chrome.js"></script>
+<script src="../src/ui/demo-data.js"></script>
+<script src="suite.js"></script>
+</body>
+</html>

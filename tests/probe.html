@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>probe</title></head><body>
+<pre id="p">running</pre>
+<script src="../src/core/i18n.js"></script>
+<script src="../src/core/model.js"></script>
+<script src="../src/core/parse.js"></script>
+<script src="../src/core/tags.js"></script>
+<script src="../src/adapters/file-adapter.js"></script>
+<script src="../src/adapters/chrome-adapter.js"></script>
+<script src="../src/adapters/mock-chrome.js"></script>
+<script>
+const L = [];
+const say = s => { L.push(s); document.getElementById('p').textContent = L.join('\n'); };
+window.__PROBE__ = () => L;
+
+window.chrome = MockChrome.api([
+  { id: '1', title: 'Bookmarks bar', children: [{ id: '10', title: 'Tech', children: [{ id: '100', title: 'A', url: 'https://a.example.com/1' }] }] },
+  { id: '2', title: 'Other bookmarks', children: [] },
+  { id: '3', title: 'Mobile bookmarks', children: [] }
+]);
+say('mock ready, roots=' + chrome.__roots.join(','));
+
+const t = new Promise(r => chrome.bookmarks.getTree(r));
+t.then(v => { say('1 getTree ok, children=' + v[0].children.length); return new Promise(r => chrome.storage.local.get(['k'], r)); })
+  .then(v => { say('2 storage.get ok ' + JSON.stringify(v)); return new Promise(r => chrome.history.search({ text: '', startTime: 0, maxResults: 0 }, r)); })
+  .then(v => { say('3 history ok ' + v.length); return new Promise(r => chrome.storage.local.set({ k: 1 }, r)); })
+  .then(v => { say('4 storage.set ok ' + JSON.stringify(v)); return BMO.ChromeAdapter.loadUsage(true); })
+  .then(v => { say('5 loadUsage ok ' + JSON.stringify(v)); return BMO.ChromeAdapter.load(); })
+  .then(v => { say('6 adapter.load ok items=' + v.state.items.length + ' folders=' + v.state.folders.length); window.__DONE__ = true; })
+  .catch(e => { say('ERR ' + (e && (e.stack || e.message || e))); window.__DONE__ = true; });
+
+setTimeout(() => { if (!window.__DONE__) { say('TIMEOUT: 卡在 ' + L[L.length - 1]); window.__DONE__ = true; } }, 6000);
+</script>
+</body></html>

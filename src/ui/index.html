@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marknest · 书签整理台</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="guide" class="guide">
+  <div class="guide-card">
+    <h1 data-i18n="app_title">Marknest 书签整理台</h1>
+    <p class="sub" data-i18n="tagline">先看清，再动手</p>
+    <div class="steps" id="g-steps">
+      <div class="step"><b>1</b><span data-i18n="g1">导出浏览器书签为 HTML（Chrome：按 <kbd>⌥B</kbd> 打开书签管理器 → 右上角 ⋮ → 导出书签）</span></div>
+      <div class="step"><b>2</b><span data-i18n="g2">把那个 HTML 文件选进来，全程本地解析，不上传</span></div>
+      <div class="step"><b>3</b><span data-i18n="g3">整理满意后导出定稿 HTML，再导回浏览器；导回是追加，不会覆盖现有书签</span></div>
+    </div>
+    <div class="guide-actions" id="g-normal">
+      <button class="btn primary" id="g-pick" data-i18n="g_pick">选择书签 HTML 文件</button>
+      <button class="btn" id="g-demo" data-i18n="g_demo">载入演示数据</button>
+      <button class="btn ghost" id="g-resume" data-i18n="g_resume" disabled>恢复上次进度</button>
+    </div>
+    <p class="note" id="g-note"></p>
+    <div class="gerror hide" id="g-error">
+      <b data-i18n="err_title">扩展读取书签失败</b>
+      <div class="mono" id="g-errmsg"></div>
+      <div class="guide-actions">
+        <button class="btn primary" id="g-retry" data-i18n="g_retry">重试读取书签</button>
+        <button class="btn ghost" id="g-fallback" data-i18n="g_fallback">改用文件导入</button>
+      </div>
+      <p class="note" data-i18n="err_hint">常见原因：扩展权限未生效（到 chrome://extensions 看该扩展卡片有没有红色「错误」），或这个页面不是从扩展图标打开的（地址栏应以 chrome-extension:// 开头）。</p>
+    </div>
+    <p class="note" data-i18n="g_privacy">本工具不联网、不上传任何书签数据；「检测失效链接」是唯一会主动访问网址的功能，需要你明确点击才会开始。</p>
+  </div>
+</div>
+
+<header id="topbar" class="hide">
+  <h1 id="title">Marknest 书签整理台</h1>
+  <div class="stats" id="stats"></div>
+  <div class="spacer"></div>
+  <button class="btn ghost" id="btn-lang">EN</button>
+  <button class="btn ghost" id="btn-help">?</button>
+  <button class="btn" id="btn-import-json">导入进度</button>
+  <button class="btn" id="btn-export-json">保存进度</button>
+  <button class="btn" id="btn-preflight">导入前预检</button>
+  <button class="btn" id="btn-export">导出书签 HTML</button>
+  <button class="btn primary hide" id="btn-apply">应用到 Chrome</button>
+  <input type="file" id="file-json" accept=".json,application/json" hidden>
+</header>
+
+<div id="app" class="hide">
+  <aside id="aside">
+    <div class="search">
+      <input id="q" type="search" autocomplete="off">
+      <label class="search-scope"><input type="checkbox" id="search-here"><span data-i18n="search_here">仅当前分类</span></label>
+    </div>
+    <div class="tree-tools">
+      <input id="tree-q" type="search" placeholder="筛选分类…" autocomplete="off">
+      <button class="btn ghost icon" id="btn-expand-all" title="展开全部">⊞</button>
+      <button class="btn ghost icon" id="btn-collapse-all" title="折叠全部">⊟</button>
+    </div>
+    <div class="tree" id="tree"></div>
+    <div class="aside-foot">
+      <button class="btn" id="btn-new-top" style="flex:1"></button>
+      <button class="btn ghost" id="btn-classify" title="自动归类建议">✦</button>
+    </div>
+    <div id="resizer" title="拖动调整宽度，双击恢复默认"></div>
+  </aside>
+
+  <main>
+    <div class="toolbar">
+      <div class="crumb" id="crumb"></div>
+      <div class="spacer"></div>
+      <label class="tb-check" title="默认只显示当前分类本层的书签"><input type="checkbox" id="inc-sub"><span data-i18n="inc_sub">包含子分类</span></label>
+      <button class="btn ghost" id="btn-clear-sel" disabled></button>
+      <button class="btn" id="btn-check"></button>
+      <button class="btn ghost" id="btn-sort"></button>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="selbar hide" id="selbar">
+      <span id="selcount"></span>
+      <div class="spacer"></div>
+      <button class="btn" id="btn-move"></button>
+      <button class="btn" id="btn-home"></button>
+      <button class="btn danger" id="btn-del"></button>
+      <button class="btn ghost" id="btn-unsel"></button>
+    </div>
+    <div class="list" id="list"></div>
+    <footer>
+      <span><kbd>⌘Z</kbd> <span data-i18n="undo">撤销</span> <kbd>⇧⌘Z</kbd> <span data-i18n="redo">重做</span></span>
+      <span><kbd>⌫</kbd> <span data-i18n="del">删除</span> <kbd>⌘A</kbd> <kbd>Esc</kbd></span>
+      <span id="foot-hint"></span>
+      <div class="spacer"></div>
+      <span id="save-hint"></span>
+    </footer>
+  </main>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast"></div>
+
+<script src="../core/i18n.js"></script>
+<script src="../core/model.js"></script>
+<script src="../core/parse.js"></script>
+<script src="../core/tags.js"></script>
+<script src="../core/classify.js"></script>
+<script src="../core/preflight.js"></script>
+<script src="../core/export.js"></script>
+<script src="../core/diff.js"></script>
+<script src="../adapters/file-adapter.js"></script>
+<script src="../adapters/chrome-adapter.js"></script>
+<script src="demo-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

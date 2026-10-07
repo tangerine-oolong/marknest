@@ -1,0 +1,25 @@
+# 构建产物（仓库只放源码）
+dist/
+
+# 任何真实书签数据 —— 永远不要提交
+*.real.html
+bookmarks-*.html
+bookmarks_*.html
+*整理定稿*
+*书签整理台*.html
+bm_state*.json
+*-state.json
+samples/real-*
+
+# 本地进度导出
+*进度.json
+*progress*.json
+
+# 本地敏感片段名单（含公司内网域名等，绝不入库）
+tools/leak-blocklist.local.txt
+
+# 编辑器 / 系统
+.DS_Store
+*.swp
+.idea/
+.vscode/
