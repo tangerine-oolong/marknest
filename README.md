@@ -3,6 +3,8 @@
 > 一个把浏览器书签"摊开看清"再动手整理的工具：全局搜索、批量移动、删除进回收站、可撤销、
 > 自动归类建议、导入前体检。所有处理都在本机完成，不上传任何数据。
 
+![Marknest 界面预览（截图内容全部为合成演示数据）](docs/assets/preview.png)
+
 **两种用法，一份源码**
 
 | 形态 | 说明 | 适合谁 |
@@ -89,6 +91,7 @@
 ```bash
 python3 tools/make-demo.py     # 生成合成演示数据 samples/demo-bookmarks.html
 python3 tools/build.py         # 产出 dist/extension 与 dist/web/index.html
+python3 tools/screenshot.py    # 用无头 Chrome 重新生成顶部预览图（内容全是合成数据）
 python3 tests/run-tests.py     # 静态自测：构建、泄露守卫、CSP、manifest、i18n 对齐
 # 功能自测：用浏览器打开 tests/browser-tests.html，应显示"全部通过"
 python3 tools/leak-guard.py    # 扫描是否混入真实书签数据（发布前必跑）

@@ -1142,6 +1142,8 @@
         if (!window.BMO_DEMO_HTML) return toast('⚠ demo');
         loadFromHtmlText(window.BMO_DEMO_HTML);
       };
+      // ?demo=1 直接载入演示数据（用于截图、预览和 CI 产物）
+      if (/[?&]demo=1/.test(location.search)) { $('#g-demo').click(); return; }
       $('#guide').classList.remove('hide');
       return;
     }
