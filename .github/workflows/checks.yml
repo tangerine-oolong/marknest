@@ -14,6 +14,22 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: YAML 语法（CI 配置与 issue 模板）
+        run: |
+          pip install --quiet pyyaml
+          python3 - <<'PY'
+          import glob, sys, yaml
+          bad = 0
+          for f in sorted(glob.glob('.github/**/*.yml', recursive=True)):
+              try:
+                  yaml.safe_load(open(f, encoding='utf-8'))
+                  print('  ok  ', f)
+              except Exception as e:
+                  bad += 1
+                  print('  FAIL', f, '->', e)
+          sys.exit(1 if bad else 0)
+          PY
+
       - name: 泄露守卫（禁止真实书签数据入库）
         run: python3 tools/leak-guard.py
 

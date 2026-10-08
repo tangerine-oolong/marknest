@@ -1,0 +1,41 @@
+name: 功能建议 / Feature request
+about: 想让它多做点什么
+title: "[feat] "
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        这个工具的定位是：**把书签摊开看清，然后让你自己决定怎么改**。
+        所以"自动帮你把上千条书签重排"这类需求大概率不会做——任何通用规则都会猜错，
+        默认策略永远是保留你原来的结构，自动归类只给建议。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 你想解决什么问题
+      description: 说场景比说方案有用。你现在是怎么绕过这个问题的？
+      placeholder: 我每次整理都要…，很麻烦，因为…
+    validations:
+      required: true
+  - type: textarea
+    id: want
+    attributes:
+      label: 你希望它变成什么样
+      placeholder: 希望有一个…，在…的时候…
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 这个诉求属于哪一类
+      options:
+        - 查找 / 筛选
+        - 批量操作
+        - 分类与命名
+        - 数据安全（备份 / 回滚 / 撤销）
+        - 性能（书签很多时）
+        - 安装与分发
+        - 其他
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充
+      description: 其他浏览器的同类工具怎么做的、截图、你的书签规模等

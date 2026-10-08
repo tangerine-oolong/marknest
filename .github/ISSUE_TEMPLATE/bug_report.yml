@@ -1,0 +1,69 @@
+name: 反馈问题 / Bug report
+about: 功能不对、报错、数据看起来丢了
+title: "[bug] "
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先说结论：**这个工具不会静默删除你的书签**。扩展形态的所有编辑先存在草稿里，
+        只有点「应用到 Chrome」才会写回，写回前还会自动备份最近 5 份。
+        如果你怀疑书签丢了，请先看下面第 4 项。
+  - type: dropdown
+    id: form
+    attributes:
+      label: 你用的是哪个形态
+      options:
+        - Chrome 扩展
+        - 单文件网页版
+        - 其他 Chromium 内核浏览器（Edge / Brave 等）
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 发生了什么
+      description: 有报错就把报错原文贴上来，比描述有用得多
+      placeholder: 我点了…，期望…，实际…
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开 …
+        2. 勾选 …
+        3. 点击 …
+      value: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+  - type: textarea
+    id: data
+    attributes:
+      label: 关于"书签不见了"，请先确认这三件事
+      value: |
+        - [ ] 打开 Chrome 自带的书签管理器（`⌥⌘B` / `Ctrl+Shift+O`）看真实状态，本工具的草稿态不会立刻改浏览器
+        - [ ] 在工具里按 `⌘Z` 撤销，或去左侧「回收站」看是否在那里
+        - [ ] 扩展形态：是否点过「应用到 Chrome」；如果点过，用备份回滚（见 docs/install-extension.md）
+      render: markdown
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      description: chrome://extensions 里该扩展卡片上的版本号，或网页版文件所在 Release
+      placeholder: v0.1.0
+  - type: input
+    id: env
+    attributes:
+      label: 系统与浏览器
+      placeholder: macOS 15 / Chrome 154
+  - type: textarea
+    id: scale
+    attributes:
+      label: 你的书签规模
+      description: 几千条和几十条的边界情况不一样
+      placeholder: 约 900 条书签 / 35 个分类

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 使用文档
+    url: https://github.com/tangerine-oolong/marknest/tree/main/docs
+    about: 安装、快速上手、权限说明、隐私承诺、常见问题
+  - name: 下载已构建好的版本
+    url: https://github.com/tangerine-oolong/marknest/releases/latest
+    about: 不想装 Python，直接拿扩展 zip 或单文件网页版

@@ -114,6 +114,10 @@ python3 tools/csp-check.py     # MV3 CSP 合规：扩展包内不得有内联脚
 
 欢迎 PR，但请先跑 `tests/run-tests.py` 和浏览器测试套件。
 
+## 版本与变更
+
+版本号遵循语义化版本，历史见 [CHANGELOG.md](CHANGELOG.md)。当前最新：**[v0.1.0](releases/latest)**。
+
 ## 许可
 
 MIT — 见 [LICENSE](LICENSE)。
